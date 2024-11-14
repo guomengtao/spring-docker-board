@@ -1,0 +1,4 @@
+com/example/messageboard/controller/AdminController.class
+com/example/messageboard/config/SecurityConfig.class
+com/example/messageboard/MessageBoardApplication.class
+com/example/messageboard/dto/MessageDTO.class

@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:mysql://db:3306/messageboard
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+admin:
+  username: ${ADMIN_USERNAME}
+  password: ${ADMIN_PASSWORD}
+
+server:
+  port: 8080

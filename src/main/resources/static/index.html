@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言板</title>
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        /* 默认主题 */
+        :root {
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --card-bg: white;
+            --border-color: #ddd;
+            --primary-color: #007bff;
+            --hover-color: #0056b3;
+        }
+
+        /* 护眼主题 */
+        body.eye-care {
+            --bg-color: #c7edcc;
+            --text-color: #2c3e50;
+            --card-bg: #e8f5e9;
+            --border-color: #81c784;
+            --primary-color: #2ecc71;
+            --hover-color: #27ae60;
+        }
+
+        /* 新年主题 */
+        body.new-year {
+            --bg-color: #ffebee;
+            --text-color: #d32f2f;
+            --card-bg: #fff8f8;
+            --border-color: #ffcdd2;
+            --primary-color: #e53935;
+            --hover-color: #c62828;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="1" fill="%23ff8a80" opacity="0.1"/></svg>');
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .theme-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .default-btn {
+            background-color: #2196f3;
+            color: white;
+        }
+
+        .eye-care-btn {
+            background-color: #81c784;
+            color: white;
+        }
+
+        .new-year-btn {
+            background-color: #e53935;
+            color: white;
+        }
+
+        .message {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .message:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .message .content {
+            font-size: 1.1em;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .message .time {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-1px);
+        }
+
+        .like-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .like-count {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+
+        .replies {
+            margin-left: 20px;
+            padding: 10px;
+            border-left: 3px solid var(--primary-color);
+            background: var(--card-bg);
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .reply-form {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* 加载动画优化 */
+        .loading {
+            background: rgba(var(--bg-color), 0.9);
+        }
+
+        .loading::after {
+            border-color: var(--border-color);
+            border-top-color: var(--primary-color);
+        }
+
+        /* 新年主题特殊装饰 */
+        .new-year .message {
+            border: 2px solid #ff8a80;
+            background-image: linear-gradient(45deg, var(--card-bg) 90%, #fff1f1 100%);
+        }
+
+        .new-year .message::before {
+            content: '🎊';
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-switcher">
+        <button class="theme-btn default-btn" onclick="switchTheme('default')">默认主题</button>
+        <button class="theme-btn eye-care-btn" onclick="switchTheme('eye-care')">护眼模式</button>
+        <button class="theme-btn new-year-btn" onclick="switchTheme('new-year')">新年风格</button>
+    </div>
+
+    <h1>留言板</h1>
+    
+    <div id="messageForm">
+        <textarea id="newMessage" placeholder="请输入留言内容..."></textarea>
+        <button onclick="postMessage()">发表留言</button>
+    </div>
+
+    <div id="messageList"></div>
+    <div id="loading" class="loading"></div>
+
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // 显示/隐藏回复框
+        function toggleReplyForm(messageId) {
+            const replyForm = document.getElementById(`replyForm-${messageId}`);
+            if (replyForm.style.display === 'none' || !replyForm.style.display) {
+                replyForm.style.display = 'block';
+            } else {
+                replyForm.style.display = 'none';
+            }
+        }
+
+        // 提交回复
+        function submitReply(messageId) {
+            const content = document.getElementById(`replyContent-${messageId}`).value;
+            if (!content.trim()) {
+                alert('回复内容不能为空！');
+                return;
+            }
+
+            showLoading();
+            fetch(`/api/messages/${messageId}/reply`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content: content,
+                    parentId: messageId
+                })
+            })
+            .then(response => response.json())
+            .then(() => {
+                document.getElementById(`replyContent-${messageId}`).value = '';
+                toggleReplyForm(messageId);
+                loadMessages();
+            })
+            .finally(() => {
+                hideLoading();
+            });
+        }
+
+        // 点赞功能
+        function likeMessage(messageId) {
+            showLoading();
+            fetch(`/api/messages/${messageId}/like`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(() => loadMessages())
+            .finally(() => {
+                hideLoading();
+            });
+        }
+
+        // 加载消息列表
+        function loadMessages() {
+            showLoading();
+            fetch('/api/messages')
+                .then(response => response.json())
+                .then(messages => {
+                    const messageList = document.getElementById('messageList');
+                    messageList.innerHTML = '';
+                    
+                    // 按创建时间排序，最新的在前面
+                    messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    
+                    // 分离主留言和回复
+                    const mainMessages = messages.filter(m => !m.parentId);
+                    const replies = messages.filter(m => m.parentId);
+                    
+                    mainMessages.forEach(message => {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = 'message';
+                        messageDiv.innerHTML = `
+                            <div class="content">${message.content}</div>
+                            <div class="time">
+                                <span class="message-tag">发布于</span>${new Date(message.createdAt).toLocaleString()}
+                            </div>
+                            <div class="message-actions">
+                                <button onclick="toggleReplyForm(${message.id})">回复</button>
+                                <button class="like-button" onclick="likeMessage(${message.id})">
+                                    👍 <span class="like-count">${message.likes || 0}</span>
+                                </button>
+                                <button onclick="deleteMessage(${message.id})">删除</button>
+                            </div>
+                            
+                            <div class="reply-form" id="replyForm-${message.id}">
+                                <textarea id="replyContent-${message.id}" placeholder="请输入回复内容..."></textarea>
+                                <div class="buttons">
+                                    <button onclick="submitReply(${message.id})">提交回复</button>
+                                    <button onclick="toggleReplyForm(${message.id})">取消</button>
+                                </div>
+                            </div>
+                            
+                            <div class="replies" id="replies-${message.id}">
+                                <div class="message-tag">回复列表</div>
+                            </div>
+                        `;
+                        
+                        messageList.appendChild(messageDiv);
+                        
+                        // 添加该消息的所有回复
+                        const messageReplies = replies.filter(r => r.parentId === message.id);
+                        const repliesDiv = messageDiv.querySelector(`#replies-${message.id}`);
+                        
+                        if (messageReplies.length === 0) {
+                            repliesDiv.style.display = 'none';
+                        } else {
+                            messageReplies.forEach(reply => {
+                                repliesDiv.innerHTML += `
+                                    <div class="message">
+                                        <div class="content">${reply.content}</div>
+                                        <div class="time">
+                                            <span class="message-tag">回复于</span>${new Date(reply.createdAt).toLocaleString()}
+                                        </div>
+                                        <div class="message-actions">
+                                            <button class="like-button" onclick="likeMessage(${reply.id})">
+                                                👍 <span class="like-count">${reply.likes || 0}</span>
+                                            </button>
+                                            <button onclick="deleteMessage(${reply.id})">删除</button>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                        }
+                    });
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+        }
+
+        // 发表新留言
+        function postMessage() {
+            const content = document.getElementById('newMessage').value;
+            if (!content.trim()) return;
+
+            showLoading();
+            fetch('/api/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content: content
+                })
+            })
+            .then(response => response.json())
+            .then(() => {
+                document.getElementById('newMessage').value = '';
+                loadMessages();
+            })
+            .finally(() => {
+                hideLoading();
+            });
+        }
+
+        // 删除留言
+        function deleteMessage(id) {
+            if (!confirm('确定要删除这条留言吗？')) return;
+
+            showLoading();
+            fetch(`/api/messages/${id}`, {
+                method: 'DELETE'
+            })
+            .then(() => loadMessages())
+            .finally(() => {
+                hideLoading();
+            });
+        }
+
+        // 页面加载时获取留言
+        loadMessages();
+
+        // 添加主题切换功能
+        function switchTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('theme', theme);
+        }
+
+        // 页面加载时恢复保存的主题
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                switchTheme(savedTheme);
+            }
+        });
+    </script>
+</body>
+</html> 
