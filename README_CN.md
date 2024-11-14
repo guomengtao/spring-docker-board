@@ -30,35 +30,31 @@
 
 ## 快速开始
 
-1. 克隆仓库：
+### 方式一：使用Docker（推荐）
 ```bash
-git clone https://github.com/yourusername/message-board.git
-cd message-board
-```
-
-2. 启动：
-```bash
+# 这将启动所有需要的容器
 docker-compose up --build
 ```
 
-3. 访问：
-- 前台：http://localhost:8081
-- 后台：http://localhost:8081/admin
-  - 账号：admin
-  - 密码：admin123
-
-### 手动部署
-
+### 方式二：手动部署（不使用Docker）
 环境要求：
 - JDK 17+
 - Maven 3.8+
-- MySQL 8.0+
+- MySQL 8.0+（本地运行）
 
 步骤：
-1. 配置数据库
-2. 修改配置文件
-3. 编译：`mvn clean package`
-4. 运行：`java -jar target/message-board-1.0.0.jar`
+1. 本地配置MySQL数据库
+2. 更新application.properties中的数据库配置
+3. 构建应用：
+```bash
+mvn clean package
+```
+4. 运行JAR文件：
+```bash
+java -jar target/message-board-1.0.0.jar
+```
+
+注意：方式二需要手动设置MySQL，不使用容器。
 
 ## 📚 使用说明
 

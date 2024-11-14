@@ -32,34 +32,31 @@ A Spring Boot based message board system that allows users to post and manage me
 
 ## Quick Start
 
-1. Clone the repository:
+### Option 1: Using Docker (Recommended)
 ```bash
-git clone git@github.com:guomengtao/spring-docker-board.git
-```
-
-2. Start with Docker:
-```bash
+# This will start all required containers
 docker-compose up --build
 ```
 
-3. Access:
-- Frontend: http://localhost:8081
-- Admin Panel: http://localhost:8081/admin
-  - Username: admin
-  - Password: admin123
-
-### Manual Deployment
-
+### Option 2: Manual Deployment (Without Docker)
 Requirements:
 - JDK 17+
 - Maven 3.8+
-- MySQL 8.0+
+- MySQL 8.0+ (running locally)
 
 Steps:
-1. Configure database
-2. Modify configuration files
-3. Build: `mvn clean package`
-4. Run: `java -jar target/message-board-1.0.0.jar`
+1. Configure MySQL database locally
+2. Update application.properties with local database settings
+3. Build the application:
+```bash
+mvn clean package
+```
+4. Run the JAR file:
+```bash
+java -jar target/message-board-1.0.0.jar
+```
+
+Note: Option 2 requires manual setup of MySQL and does not use containers.
 
 ## 📚 Usage Guide
 
