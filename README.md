@@ -6,11 +6,11 @@ A Spring Boot based message board system that allows users to post and manage me
 
 ## Screenshots
 
-### Home Page
-![Home Page](screenshots/home.png)
+### Frontend Interface
+![Frontend Interface](docs/images/frontend.png)
 
 ### Admin Dashboard
-![Admin Dashboard](screenshots/admin.png)
+![Admin Dashboard](docs/images/admin.png)
 
 ### Message List
 ![Message List](screenshots/messages.png)

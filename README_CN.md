@@ -4,14 +4,11 @@
 
 ## 演示截图
 
-### 首页
-![首页](screenshots/home.png)
+### 前台界面
+![前台界面](docs/images/frontend.png)
 
 ### 管理后台
-![管理后台](screenshots/admin.png)
-
-### 留言列表
-![留言列表](screenshots/messages.png)
+![管理后台](docs/images/admin.png)
 
 ## 功能特点
 
