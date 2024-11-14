@@ -2,6 +2,17 @@
 
 基于Spring Boot的留言板系统，支持用户发布和管理留言。
 
+## 演示截图
+
+### 首页
+![首页](screenshots/home.png)
+
+### 管理后台
+![管理后台](screenshots/admin.png)
+
+### 留言列表
+![留言列表](screenshots/messages.png)
+
 ## 功能特点
 
 - 用户留言发布

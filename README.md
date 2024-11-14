@@ -4,6 +4,17 @@ A Spring Boot based message board system that allows users to post and manage me
 
 [中文文档](README_CN.md)
 
+## Screenshots
+
+### Home Page
+![Home Page](screenshots/home.png)
+
+### Admin Dashboard
+![Admin Dashboard](screenshots/admin.png)
+
+### Message List
+![Message List](screenshots/messages.png)
+
 ## Features
 
 - User message posting
