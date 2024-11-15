@@ -1,0 +1,37 @@
+更新日期：2024-11-15
+
+1. 部署脚本优化
+- 修改 deploy-nginx.sh，添加自动启动 Docker 容器功能
+- 脚本现在会自动执行：
+  * 配置 Nginx
+  * 设置 SSL 证书
+  * 启动 Docker 容器 (docker-compose up -d)
+  * 显示容器状态
+
+2. 环境配置说明
+- 使用 .env 文件存储配置：
+  * DOMAIN: board3.1panel.rinuo.com
+  * PORT: 8083
+- 不需要手动传入参数
+
+3. 部署步骤
+# 添加执行权限
+chmod +x deploy-nginx.sh
+
+# 执行部署脚本
+./deploy-nginx.sh
+
+# 查看日志（可选）
+docker-compose logs -f
+
+4. 注意事项
+- 确保 .env 文件配置正确
+- 确保有足够的权限执行脚本
+- 部署完成后检查容器状态
+
+5. 故障排查
+如果遇到问题，检查：
+- Nginx 配置：sudo nginx -t
+- 容器状态：docker ps
+- 应用日志：docker-compose logs -f
+- 端口占用：sudo netstat -tulpn | grep 8083
