@@ -1,0 +1,77 @@
+Nginx SSL 自动部署说明
+======================
+
+文件结构：
+---------
+.env                    - 环境变量配置
+basic_template.conf     - HTTP 配置模板
+full_template.conf      - HTTPS 配置模板
+deploy-ssl.sh          - 部署脚本
+
+部署步骤：
+---------
+1. 配置环境变量
+   编辑 .env 文件：
+   nano .env
+
+   配置示例：
+   SERVER_IP=132.226.114.176          # 服务器IP
+   PROJECT_PORT=8082                  # 项目端口
+   PROJECT_DOMAIN=your-domain.com     # 域名
+   PROJECT_EMAIL=your@email.com       # 证书通知邮箱（重要）
+
+2. 执行部署
+   ./deploy-ssl.sh
+
+验证部署：
+---------
+检查 Nginx 配置：
+sudo nginx -t
+
+检查证书状态：
+sudo certbot certificates
+
+检查服务状态：
+sudo systemctl status nginx
+
+访问地址：
+---------
+HTTP:  http://your-domain.com
+HTTPS: https://your-domain.com (推荐)
+
+注意事项：
+---------
+1. 确保域名已正确解析到服务器 IP
+2. 确保 80 和 443 端口已开放
+3. 证书会自动续期，无需手动操作
+4. 邮箱地址用于接收证书过期提醒，请填写真实邮箱
+
+故障排除：
+---------
+如果部署失败，请检查：
+1. 域名解析是否正确
+2. 防火墙端口是否开放
+3. Nginx 配置是否有语法错误
+4. 查看日志：sudo journalctl -u nginx
+
+维护命令：
+---------
+重启 Nginx：
+sudo systemctl restart nginx
+
+查看证书状态：
+sudo certbot certificates
+
+手动续期证书：
+sudo certbot renew
+
+部署成功示例：
+------------
+Deploying certificate
+Successfully deployed certificate for your-domain.com
+Congratulations! You have successfully enabled HTTPS
+
+部署完成！
+您可以通过以下地址访问：
+HTTP: http://your-domain.com
+HTTPS: https://your-domain.com
