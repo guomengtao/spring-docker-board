@@ -1,38 +1,133 @@
-# Message Board Application
+# Spring Boot Message Board
 
-[... previous content ...]
+A message board system based on Spring Boot with Docker deployment and HTTPS support.
 
-## Access Methods
+[中文文档](README_CN.md)
 
-### Dual Access Support
-1. Direct IP Access
-   - http://132.226.114.176:8081
-   - Simple and direct access
-   - No SSL certificate required
-   - Requires port 8081 to be opened in Oracle Cloud
+## Screenshots
 
-2. Domain Access (with HTTPS)
-   - https://board.1panel.rinuo.com
-   - Automatic HTTP to HTTPS redirection
-   - Secure connection with SSL
-   - Uses standard ports (80/443) only
+### Frontend Interface
+![Frontend](docs/images/frontend.png)
 
-### Port Configuration in Oracle Cloud
+### Admin Dashboard
+![Admin](docs/images/admin.png)
 
-1. For IP Direct Access (8081)
-   - Open Oracle Cloud Console
-   - Navigate to Networking > Virtual Cloud Networks > Security Lists
-   - Add Ingress Rule:
-     ```
-     Port Range: 8081
-     Source CIDR: 0.0.0.0/0
-     Description: Spring Boot Application Port
-     ```
+## Features
+- Message posting and management
+- Admin dashboard with moderation tools
+- RESTful API support
+- Spring Security integration
+- HTTPS support with auto-renewed SSL certificates
+- Nginx reverse proxy for production
+- Dual access methods (IP and Domain)
+- Containerized deployment with Docker
 
-2. For Domain Access (80/443)
-   - Standard HTTP/HTTPS ports (usually already open)
-   - No need to expose 8081 (handled by Nginx reverse proxy)
-   - If needed, ensure ports 80 and 443 are open
+## Tech Stack
+- Java 17
+- Spring Boot 3.x
+- Spring Data JPA
+- Spring Security
+- MySQL 8.0
+- Maven
+- Docker & Docker Compose
+- Nginx
+- Let's Encrypt SSL
 
-### Configuration
-[... rest of the content ...]
+## Quick Start
+
+### Prerequisites
+- Docker and Docker Compose
+- Nginx
+- Domain name (optional, for HTTPS)
+- Oracle Cloud instance
+
+### Access Methods
+
+1. Direct IP Access:
+   - URL: http://132.226.114.176:8081
+   - Features:
+     * Simple and direct access
+     * No SSL certificate required
+     * Port 8081 must be open in Oracle Cloud
+     * Suitable for development/testing
+
+2. Domain Access:
+   - URL: https://board.1panel.rinuo.com
+   - Features:
+     * Automatic HTTP to HTTPS redirection
+     * Secure SSL connection
+     * Standard ports (80/443)
+     * Recommended for production
+
+### Installation
+
+1. Clone repository:
+```bash
+git clone git@github.com:guomengtao/spring-docker-board.git
+cd spring-docker-board
+```
+
+2. Configure environment:
+```bash
+cp .env.example .env
+# Edit .env file with your settings:
+# SERVER_IP=132.226.114.176
+# PROJECT_PORT=8081
+# PROJECT_DOMAIN=board.1panel.rinuo.com (optional)
+# PROJECT_EMAIL=your@email.com (optional)
+```
+
+3. Launch application:
+```bash
+# For IP access only:
+docker-compose up -d
+
+# For domain access with HTTPS:
+./deploy-nginx.sh
+```
+
+## Development
+
+### Building from source
+```bash
+mvn clean package
+```
+
+### Running tests
+```bash
+mvn test
+```
+
+## Deployment
+
+### Docker Compose Services
+- Spring Boot application
+- MySQL database
+- Nginx reverse proxy
+
+### Data Persistence
+- MySQL data volume
+- Application logs
+- SSL certificates
+
+### Security Notes
+- HTTPS encryption (domain access)
+- Spring Security integration
+- Database password encryption
+- Regular security updates
+
+## Contributing
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+MIT
+
+## Acknowledgments
+- Spring Boot
+- Docker
+- Nginx
+- Let's Encrypt

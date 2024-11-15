@@ -59,51 +59,44 @@
      * 使用标准端口（80/443）
      * 推荐用于生产环境
 
-### Oracle Cloud 设置
-
-1. IP 直接访问配置:
-   - 打开 Oracle Cloud 控制台
-   - 导航到: 网络 > 虚拟云网络 > 安全列表
-   - 添加入站规则:
-     * 端口范围: 8081
-     * 源 CIDR: 0.0.0.0/0
-     * 描述: Spring Boot 应用端口
-
-2. 域名访问配置:
-   - 确认标准端口已开放:
-     * 端口 80 (HTTP)
-     * 端口 443 (HTTPS)
-   - 无需开放 8081 端口
-
 ### 安装步骤
 
 1. 克隆仓库:
-   - git clone git@github.com:guomengtao/spring-docker-board.git
-   - cd spring-docker-board
+```bash
+git clone git@github.com:guomengtao/spring-docker-board.git
+cd spring-docker-board
+```
 
 2. 配置环境:
-   - cp .env.example .env
-   - 编辑 .env 文件:
-     * SERVER_IP=132.226.114.176
-     * PROJECT_PORT=8081
-     * PROJECT_DOMAIN=board.1panel.rinuo.com (可选)
-     * PROJECT_EMAIL=your@email.com (可选)
+```bash
+cp .env.example .env
+# 编辑 .env 文件:
+# SERVER_IP=132.226.114.176
+# PROJECT_PORT=8081
+# PROJECT_DOMAIN=board.1panel.rinuo.com (可选)
+# PROJECT_EMAIL=your@email.com (可选)
+```
 
 3. 启动应用:
-   - 仅 IP 访问:
-     * docker-compose up -d
-   - 域名访问:
-     * ./deploy-nginx.sh
+```bash
+# 仅 IP 访问:
+docker-compose up -d
+
+# 域名访问:
+./deploy-nginx.sh
+```
 
 ## 开发
 
 ### 从源码构建
-1. 清理并打包应用:
-   - mvn clean package
+```bash
+mvn clean package
+```
 
 ### 运行测试
-1. 执行所有测试:
-   - mvn test
+```bash
+mvn test
+```
 
 ## 部署
 
@@ -113,17 +106,11 @@
 - Nginx 反向代理
 
 ### 数据持久化
-1. 卷配置:
-   - mysql_data: 数据库文件
+- MySQL 数据卷
+- 应用日志
+- SSL 证书
 
-### 重要说明
-- IP 访问始终可用
-- 域名访问需要配置 SSL 证书
-- 两种访问方式可以同时使用
-- 域名访问自动跳转到 HTTPS
-- SSL 证书每 90 天自动更新
-
-## 安全性
+### 安全说明
 - HTTPS 加密（域名访问）
 - Spring Security 集成
 - 数据库密码加密
