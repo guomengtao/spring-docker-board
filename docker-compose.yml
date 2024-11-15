@@ -1,27 +1,27 @@
-version: '3.8'
+name: ${COMPOSE_PROJECT_NAME:-${PWD##*/}}
 
 services:
   app:
     build: .
-    container_name: message_board_app2
+    container_name: ${COMPOSE_PROJECT_NAME:-${PWD##*/}}_app
     ports:
-      - "${PROJECT_PORT}:8081"
+      - "8083:8081"
     depends_on:
       db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/message_board?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/board_test?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 123456
 
   db:
     image: mysql:8.0
-    container_name: message_board_mysql2    # 移除了 ¥ 符号
+    container_name: ${COMPOSE_PROJECT_NAME:-${PWD##*/}}_mysql
     environment:
       MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: message_board
+      MYSQL_DATABASE: board_test
     ports:
-      - "3307:3306"
+      - "3308:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
